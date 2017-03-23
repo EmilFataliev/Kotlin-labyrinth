@@ -9,24 +9,35 @@ class MyPlayerTest : AbstractPlayerTest() {
 
     override fun createPlayer() = MyPlayer()
 
-    private val fileName = "labyrinths/lab2.txt"
-
-    init {
-        doTest()
-    }
-
     fun doTest() {
-        val lab = Labyrinth.createFromFile(fileName)
-        val player = createPlayer()
-        val controller = Controller(lab, player)
-        val actualResult = controller.makeMoves(500)
-        println(actualResult)
-
+        var won = 0
+        var lose = 0
+        for (j in 1..7) {
+            println("Labyrinth №$j:")
+            for (i in 1..1000) {
+                val lab = Labyrinth.createFromFile("labyrinths/lab$j.txt")
+                val player = MyPlayer()
+                val controller = Controller(lab, player)
+                val result = controller.makeMoves(1000)
+                if (result.exitReached) {
+                    ++won
+                } else {
+                    ++lose
+                }
+            }
+            println("Won - $won times")
+            println("Lose - $lose times\n")
+            won = 0
+            lose = 0
+        }
     }
 
 
 }
-fun main(args: Array<String>) {
-    val player = MyPlayerTest()
 
+
+fun main(args: Array<String>) {
+
+    val myPlayer: MyPlayerTest = MyPlayerTest()
+    myPlayer.doTest()
 }
